@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Doctor UI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#faf8f5;--card:#fff;--ink:#111;--mut:#6b6b6b;--line:#c9c9c9;--blue:#1f4e9c;--sel:#e8f0fb;--selb:#86b7ef;--warn:#f8dca3;--wink:#6b5321;--pill:#d6e4f7;--pbg:#111;--pink:#fff;--m:24px;--w:780px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141414;--card:#1e1e1e;--ink:#f2f2f2;--mut:#a0a0a0;--line:#4a4a4a;--blue:#8db4f0;--sel:#1a2a44;--selb:#4c82c9;--warn:#4a3d17;--wink:#f0d9a0;--pill:#1d3150;--pbg:#f2f2f2;--pink:#111}}
+:root[data-theme="dark"]{--bg:#141414;--card:#1e1e1e;--ink:#f2f2f2;--mut:#a0a0a0;--line:#4a4a4a;--blue:#8db4f0;--sel:#1a2a44;--selb:#4c82c9;--warn:#4a3d17;--wink:#f0d9a0;--pill:#1d3150;--pbg:#f2f2f2;--pink:#111}
+html{font-size:16px;height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:Figtree,"Segoe UI",system-ui,sans-serif;font-size:1.1rem;line-height:1.35;display:flex;flex-direction:column;padding:var(--m)}
+.stage{flex:1;min-height:0;width:100%;display:flex;justify-content:center;align-items:center}
+.tool{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:center;font:600 13px/1 system-ui,sans-serif;color:var(--mut);padding:0 0 10px}.tg{display:flex;align-items:center;gap:4px}.tg button{min-height:34px;padding:0 12px;border:1.5px solid var(--line);background:var(--card);border-radius:8px;font:600 13px system-ui,sans-serif}.tg button.on{background:var(--sel);border-color:var(--selb);color:var(--blue)}
+html[data-dev=mobile] .wrap,html[data-dev=mobile] .wrap.s2{--w:390px}html[data-dev=tablet] .wrap,html[data-dev=tablet] .wrap.s2{--w:780px}html[data-dev=desktop] .wrap.s2{--w:1200px}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{width:min(100%,var(--w));max-height:100%;display:flex;flex-direction:column}.wrap.s2{height:100%}
+@media(min-width:1100px){.wrap.s2{--w:1200px}}
+.pill{align-self:flex-start;background:var(--pill);color:var(--blue);font-weight:700;font-size:.8rem;border-radius:.5rem;padding:.2rem .6rem;margin-bottom:.5rem}
+.modal{container-type:inline-size;position:relative;background:var(--card);border:1.5px solid var(--line);border-radius:1.25rem;display:flex;flex-direction:column;overflow:hidden;min-height:0;flex:1 1 auto}
+.ic{width:1.5rem;height:1.5rem;flex:none;fill:currentColor}
+.hd{padding:1rem 1.25rem .9rem}.r{display:flex;align-items:center;justify-content:space-between;gap:.75rem}.tr{flex-wrap:wrap}
+.hd h2{margin:.2rem 0 0;font-size:1.8rem;font-weight:600;min-width:0}.sub{color:var(--mut);margin-top:.15rem}
+.hg{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:.4rem .9rem}.hg h2{margin:0}
+.x,.back{display:inline-flex;align-items:center;justify-content:center;gap:.2rem;border:0;background:none}
+.x{width:3rem;height:3rem}.x .ic{width:2rem;height:2rem}.back{min-height:2.75rem;font-weight:600;padding:0}
+.ts{display:flex;flex-wrap:nowrap;gap:.4rem;align-items:center;color:var(--mut);font-size:.95rem}
+.ts button{width:3rem;height:3rem;border:1.5px solid var(--line);background:var(--card);border-radius:.7rem;padding:0}
+.ts button.on,.chip.on,.row.on,.tile.on{background:var(--sel);border-color:var(--selb);color:var(--blue);font-weight:600}
+.bar{display:flex;gap:.5rem;margin-top:.7rem}.bar i{flex:1;height:.45rem;border-radius:9px;background:#111}.bar.b1 i:last-child{background:var(--line)}
+:root[data-theme="dark"] .bar i:not(:last-child),:root[data-theme="dark"] .bar.s i{background:#f2f2f2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .bar i{background:#f2f2f2}:root:not([data-theme="light"]) .bar.b1 i:last-child{background:var(--line)}}
+.main{flex:1;min-height:0;display:flex}.body{flex:1;min-width:0;overflow:auto;padding:.4rem 1.25rem 1.25rem}
+.pv{display:none;width:23rem;flex:none;background:var(--bg);border-left:1px solid var(--line);padding:1.25rem;overflow:auto}
+.body h3{margin:.4rem 0 .9rem;font-size:1.25rem;font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem}
+.tile{display:flex;align-items:center;gap:1rem;min-width:0;min-height:6rem;padding:0 1.4rem;border:1.5px solid var(--line);border-radius:1rem;background:var(--card);font-size:1.3rem;font-weight:500;text-align:left}
+.tile .ic{width:2.2rem;height:2.2rem}.tile.w{grid-column:span 2}.tile.on{border:2.5px solid var(--selb)}.tile.on .ic{color:var(--blue)}
+.draft{margin-top:1.1rem;background:var(--warn);color:var(--wink);border-radius:.9rem;padding:.8rem 1rem;display:flex;flex-wrap:wrap;align-items:center;gap:.7rem 1rem}
+.dt{display:flex;align-items:center;gap:.7rem;flex:1 1 16rem;min-width:0}.dt .ic{width:1.75rem;height:1.75rem}
+.da{display:flex;gap:.6rem;flex:0 0 auto;margin-left:auto}
+.da button{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:3rem;padding:0 1rem;border:1.5px solid currentColor;border-radius:.7rem;background:none;color:inherit;font-weight:600;white-space:nowrap}
+.lab{display:block;font-weight:700;margin:1.1rem 0 .5rem}
+.dr{display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin:.6rem 0 1rem}
+.seg{display:flex;background:var(--bg);border-radius:.8rem;padding:.25rem;gap:.2rem}
+.seg button{min-height:3rem;padding:0 1.3rem;border:0;border-radius:.6rem;background:none;font-weight:600;color:var(--mut)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.mc{border:1.5px solid var(--line);border-radius:1rem;padding:0 1.1rem 1.2rem}
+.mh{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;min-height:3.5rem;font-weight:700}
+.mh button{display:inline-flex;align-items:center;gap:.4rem;border:0;background:none;min-height:3rem;font-weight:600;white-space:nowrap}
+.g{display:grid;grid-template-columns:1fr;column-gap:1.1rem}
+.field{width:100%;min-height:3.6rem;border:1.5px solid var(--line);border-radius:.9rem;padding:.4rem 1rem;background:var(--card);display:flex;align-items:center;justify-content:space-between;gap:.6rem;text-align:left;font-size:1.1rem}
+.field i{display:flex;color:var(--mut)}.ph{color:var(--mut)}.fl{justify-content:flex-start}
+.chips{display:flex;flex-wrap:wrap;gap:.6rem}
+.chip{min-height:3.5rem;padding:0 1.2rem;border:1.5px solid var(--line);background:var(--card);border-radius:999px}
+.cg{display:grid;gap:.6rem;grid-template-columns:repeat(var(--c),minmax(0,1fr))}.cg .chip{padding:0 .4rem;text-align:center;line-height:1.15}
+.qf{display:grid;grid-template-columns:3.6rem 1fr 3.6rem;align-items:center;height:3.6rem;border:1.5px solid var(--line);border-radius:.9rem;overflow:hidden;text-align:center}
+.qf button{height:100%;border:0;background:var(--card);display:flex;align-items:center;justify-content:center}.qf .ic{width:1.75rem;height:1.75rem}
+.qf b{font-weight:600;font-size:1.2rem;border-left:1.5px solid var(--line);border-right:1.5px solid var(--line);line-height:3.6rem}
+textarea{width:100%;min-height:5.5rem;border:1.5px solid var(--line);border-radius:.9rem;padding:.9rem 1rem;font:inherit;background:var(--card);color:var(--ink);resize:vertical}
+.ddw{position:relative}.dd{position:absolute;left:0;right:0;top:calc(100% + .35rem);z-index:5;background:var(--card);border:1.5px solid var(--line);border-radius:.9rem;box-shadow:0 10px 28px rgba(0,0,0,.2);padding:.4rem}.dd[hidden]{display:none}
+.dd small{display:block;padding:.4rem .9rem;color:var(--mut)}.dd button{display:block;width:100%;min-height:3.6rem;text-align:left;border:0;background:none;border-radius:.6rem;padding:0 .9rem}.dd button:first-of-type{background:var(--sel);color:var(--blue);font-weight:600}
+.row{display:flex;width:100%;min-height:4.25rem;padding:.6rem 1rem;border:1.5px solid var(--line);border-radius:.9rem;background:var(--card);margin-top:.6rem;text-align:left;align-items:center}
+.add{width:100%;min-height:4rem;margin-top:1rem;border:1.5px dashed var(--line);border-radius:1rem;background:none;font-weight:600;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.ft{border-top:1px solid var(--line);padding:.7rem 1.25rem 1rem}.f1{display:flex;gap:.9rem;padding:1rem 1.25rem}
+.saved{text-align:center;color:var(--mut);font-size:.9rem;margin-bottom:.4rem}.fr{display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{min-height:4rem;min-width:0;padding:0 1.5rem;border:1.5px solid var(--line);border-radius:.9rem;background:var(--card);font-weight:600;line-height:1.2}
+.btn.p{flex:1;font-size:1.15rem}.fr .btn.p{background:var(--pbg);border-color:var(--pbg);color:var(--pink)}
+.sheet{background:#fff;color:#222;border-radius:.6rem;padding:1.3rem;box-shadow:0 1px 6px rgba(0,0,0,.2)}
+.sheet hr{border:0;border-top:1px solid #ccc;margin:.8rem 0}.sheet p{margin:.3rem 0}.sheet .ph{color:#888}.rx{font-size:1.7rem;font-weight:700}
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end}
+.sh{background:var(--card);width:100%;max-height:78%;overflow:auto;border-radius:1.25rem 1.25rem 0 0;padding:1rem 1.25rem 1.5rem}
+.strip{display:flex;align-items:center;gap:.7rem;width:100%;min-height:3.5rem;padding:.5rem 1.25rem;border:0;border-top:1px solid var(--selb);background:var(--sel);color:var(--blue);font-weight:600;text-align:left}.strip span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:calc(6rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--pbg);color:var(--pink);padding:.7rem 1.1rem;border-radius:.8rem;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:90%;text-align:center}.toast.on{opacity:1}
+@container (min-width:640px){.g{grid-template-columns:1fr 1fr}.s2c{grid-column:span 2}}
+@container (min-width:1000px){.pv{display:block}.seg,.pvb,.strip{display:none}.ov{align-items:center;justify-content:center}.sh{width:640px;border-radius:1.25rem}}
+@container (max-width:30rem){.hg{grid-template-columns:1fr auto}.hg .ts{grid-column:1/-1;grid-row:2;justify-self:start}.tiles{grid-template-columns:minmax(0,1fr)}.tile.w{grid-column:auto}.f1{flex-direction:column-reverse}.f1 .btn{width:100%}.f1 .btn.p{flex:none}}
+@container (max-width:24rem){.fr{flex-direction:column-reverse}.fr .btn{width:100%}.fr .btn.p{flex:none}.cg.d,.cg.q{grid-template-columns:repeat(2,minmax(0,1fr))}.da{flex-direction:column}.da button{flex:none;width:100%}}
+@container (max-width:520px){.da{flex:1 1 100%}.da button{flex:1}.cg.f{grid-template-columns:repeat(2,minmax(0,1fr))}.dr{flex-direction:column;align-items:stretch}.seg button{flex:1}.fr .btn:first-child,.pvb{display:none}.saved{display:none}.hd h2{font-size:1.5rem}.ts button{width:2.75rem;height:2.75rem}.tile{padding:0 1rem;font-size:1.15rem;gap:.7rem}.btn{padding:0 1rem}}
+@media(max-width:520px){body{padding:0}.stage{align-items:stretch}.tool{display:none}.wrap{height:100%;max-height:none}.pill{display:none}.modal{border-radius:0;border-width:0}}
+</style></head><body>
+<div class="tool" id="tool"></div><div class="stage"><main class="wrap" id="w"><span class="pill" id="pill"></span><div class="modal" id="m"></div></main></div>
+<div class="toast" id="t" role="status"></div>
+<script>
+const IC={"med": "<path fill=\"none\" d=\"M0 0h24v24H0V0z\"></path><path d=\"M10.5 15H8v-3h2.5V9.5h3V12H16v3h-2.5v2.5h-3V15zM19 8v11c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2zm-2 0H7v11h10V8zm1-5H6v2h12V3z\"></path>", "lab": "<path fill=\"none\" d=\"M0 0h24v24H0z\"></path><path d=\"M13 11.33 18 18H6l5-6.67V6h2m2.96-2H8.04c-.42 0-.65.48-.39.81L9 6.5v4.17L3.2 18.4c-.49.66-.02 1.6.8 1.6h16c.82 0 1.29-.94.8-1.6L15 10.67V6.5l1.35-1.69c.26-.33.03-.81-.39-.81z\"></path>", "ref": "<path fill=\"none\" d=\"M0 0h24v24H0V0z\"></path><path d=\"m15 5-1.41 1.41L15 7.83 17.17 10H8c-2.76 0-5 2.24-5 5v4h2v-4c0-1.65 1.35-3 3-3h9.17L15 14.17l-1.41 1.41L15 17l6-6-6-6z\"></path>", "bed": "<path fill=\"none\" d=\"M0 0h24v24H0V0z\"></path><path d=\"M7 14c1.66 0 3-1.34 3-3S8.66 8 7 8s-3 1.34-3 3 1.34 3 3 3zm0-4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm12-3h-8v8H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4zm2 8h-8V9h6c1.1 0 2 .9 2 2v4z\"></path>", "pwd": "<path fill=\"none\" d=\"M0 0h24v24H0V0z\"></path><path d=\"M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z\"></path>", "close": "<path fill=\"none\" d=\"M0 0h24v24H0z\"></path><path d=\"M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z\"></path>", "back": "<path fill=\"none\" d=\"M0 0h24v24H0z\"></path><path d=\"M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z\"></path>", "chev": "<path fill=\"none\" d=\"M0 0h24v24H0z\"></path><path d=\"M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z\"></path>", "cal": "<path fill=\"none\" d=\"M0 0h24v24H0V0z\"></path><path d=\"M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V10h16v11zm0-13H4V5h16v3z\"></path>", "del": "<path fill=\"none\" d=\"M0 0h24v24H0V0z\"></path><path d=\"M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z\"></path>", "search": "<path fill=\"none\" d=\"M0 0h24v24H0z\"></path><path d=\"M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z\"></path>", "add": "<path fill=\"none\" d=\"M0 0h24v24H0z\"></path><path d=\"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z\"></path>", "minus": "<path fill=\"none\" d=\"M0 0h24v24H0z\"></path><path d=\"M19 13H5v-2h14v2z\"></path>", "draft": "<path fill=\"none\" d=\"M0 0h24v24H0z\"></path><path d=\"M3 10h11v2H3v-2zm0-2h11V6H3v2zm0 8h7v-2H3v2zm15.01-3.13.71-.71a.996.996 0 0 1 1.41 0l.71.71c.39.39.39 1.02 0 1.41l-.71.71-2.12-2.12zm-.71.71-5.3 5.3V21h2.12l5.3-5.3-2.12-2.12z\"></path>", "restore": "<path fill=\"none\" d=\"M0 0h24v24H0V0z\"></path><path d=\"M13 3a9 9 0 0 0-9 9H1l4 3.99L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.25 2.52.77-1.28-3.52-2.09V8z\"></path>", "cert": "<path fill=\"none\" d=\"M0 0h24v24H0V0z\"></path><path d=\"m18 9-1.41-1.42L10 14.17l-2.59-2.58L6 13l4 4zm1-6h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-.14 0-.27.01-.4.04a2.008 2.008 0 0 0-1.44 1.19c-.1.23-.16.49-.16.77v14c0 .27.06.54.16.78s.25.45.43.64c.27.27.62.47 1.01.55.13.02.26.03.4.03h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7-.25c.41 0 .75.34.75.75s-.34.75-.75.75-.75-.34-.75-.75.34-.75.75-.75zM19 19H5V5h14v14z\"></path>", "eye": "<path fill=\"none\" d=\"M0 0h24v24H0V0z\"></path><path d=\"M12 6a9.77 9.77 0 0 1 8.82 5.5C19.17 14.87 15.79 17 12 17s-7.17-2.13-8.82-5.5A9.77 9.77 0 0 1 12 6m0-2C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 5a2.5 2.5 0 0 1 0 5 2.5 2.5 0 0 1 0-5m0-2c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7z\"></path>"};
+const ic=n=>`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`;
+const S={dev:'auto',purpose:'',find:'',rem:'',step:1,doc:'Prescription',draft:true,fs:16,drug:'5% Dextrose in Lactated Ringers',brand:'',strength:'',form:'Injection',qty:1,freq:'Once daily',dur:'1 day',sig:'',notes:'',sheet:null,mode:'Write',sigOpen:false};
+try{const f=+localStorage.getItem('rxfs');if([16,19,22].includes(f))S.fs=f}catch(e){}
+const DOCS={'Medical certificate':'cert',Prescription:'med','Lab request':'lab',Referral:'ref','Sick leave':'bed','PWD cert':'pwd'};
+const O={drug:['5% Dextrose in Lactated Ringers','Paracetamol'],brand:['Biogesic','No brand (generic)'],form:['Injection','Tablet','Capsule','Syrup','Cream','Drops'],freq:['Once daily','Twice daily','3x daily','Every 8 hours','Every 12 hours','As needed'],dur:['1 day','3 days','5 days','7 days','14 days','Custom'],sig:['Once daily','Every 8 hours','After meals'],purpose:['Employment','School','Travel','Insurance','Sports','Other']};
+const ST={'5% Dextrose in Lactated Ringers':['250 mL, 500 mL and 1 L bottle/bag (IV infusion)','Composition: Dextrose - 50 g/L Na+ - 130 mmol/L K+ - 4 mmol/L Ca++ - 1.22 – 1.5 mmol/L Cl--109 mmol/L','Lactate - 28 mmol/L']};
+const L={drug:'Drug',brand:'Brand name',strength:'Strength',form:'Dosage form',qty:'Quantity',freq:'Frequency',dur:'Duration',sig:'Sig / Patient instructions'};
+const PH={drug:'Search or type drug name…',brand:'e.g. Biogesic',strength:'Choose or type',form:'Choose dosage form'};
+const sOpts=()=>ST[S.drug]||['500 mg'];
+const rows=(k,a)=>a.map(v=>`<button class="row ${S[k]==v?'on':''}" data-k="${k}" data-v="${v}">${v}</button>`).join('');
+const chips=(k,a,c,x='')=>`<div class="chips cg ${x}" style="--c:${c}">${a.map(v=>`<button class="chip ${S[k]==v?'on':''}" data-k="${k}" data-v="${v}">${v}</button>`).join('')}</div>`;
+const fld=k=>`<button class="field" data-sheet="${k}"><span class="${S[k]?'':'ph'}">${S[k]||PH[k]}</span><i>${ic('chev')}</i></button>`;
+const ta=(k,p)=>`<textarea data-t="${k}" placeholder="${p}">${S[k]}</textarea>`;
+const F={drug:()=>fld('drug'),brand:()=>fld('brand'),strength:()=>fld('strength'),form:()=>fld('form'),
+qty:()=>`<div class="qf"><button data-q="-1" aria-label="Less">${ic('minus')}</button><b>${S.qty}</b><button data-q="1" aria-label="More">${ic('add')}</button></div>`,
+freq:()=>chips('freq',O.freq,3,'f'),dur:()=>chips('dur',O.dur,6,'d'),
+sig:()=>`<div class="ddw">${ta('sig','e.g. Inject 1 ampule IM once daily')}<div class="dd" id="sigdd" ${S.sigOpen?'':'hidden'}><small>Suggestions</small>${O.sig.map(v=>`<button data-sig="${v}">${v}</button>`).join('')}</div></div>`};
+const cell=(k,s)=>`<div class="${s?'s2c':''}"><span class="lab">${L[k]}</span>${F[k]()}</div>`;
+const pvh=()=>S.doc=='Medical certificate'?`<b>Medical certificate</b> <span class="ph">October 5th, 2026</span><hr>${S.purpose?`<p>Purpose: ${S.purpose}</p>`:'<p class="ph">Purpose</p>'}${S.find?`<p>${S.find}</p>`:'<p class="ph">Diagnosis / findings</p>'}${S.rem?`<p>${S.rem}</p>`:'<p class="ph">Remarks / recommendation</p>'}${S.notes?`<hr><p>${S.notes}</p>`:''}`:`<b>Rx</b> <span class="ph">October 5th, 2026</span><hr><p class="rx">${S.drug}</p>${S.strength?`<p>${S.strength}</p>`:''}<p>${S.form}, quantity ${S.qty}</p><p>${S.freq} for ${S.dur}</p>${S.sig?`<p>${S.sig}</p>`:'<p class="ph">Sig / patient instructions</p>'}${S.notes?`<hr><p>${S.notes}</p>`:''}`;
+const paper=()=>`<div class="sheet" data-pv>${pvh()}</div>`;
+const TS=()=>`<div class="ts"><span>Text size</span>${[[16,'.85rem'],[19,'1.1rem'],[22,'1.35rem']].map(([s,f])=>`<button data-fs="${s}" class="${S.fs==s?'on':''}" style="font-size:${f}" aria-label="Text size ${s}">A</button>`).join('')}</div>`;
+
+function step1(){
+ return `<div class="hd"><div class="hg"><h2>New document</h2>${TS()}<button class="x" aria-label="Close" data-toast="Closed (prototype)">${ic('close')}</button></div><div class="sub">Step 1 of 2</div><div class="bar b1"><i></i><i></i></div></div>
+ <div class="body"><h3>What do you want to create?</h3><div class="tiles">${Object.keys(DOCS).map(k=>`<button class="tile ${S.doc==k?'on':''}" data-d="${k}">${ic(DOCS[k])}${k}</button>`).join('')}</div>
+ ${S.draft?`<div class="draft"><div class="dt">${ic('draft')}<span>You have an unsaved draft from 26 min ago</span></div><div class="da"><button data-x="1">${ic('del')}Discard</button><button data-go="2" data-toast="Draft restored">${ic('restore')}Restore</button></div></div>`:''}</div>
+ <div class="ft f1"><button class="btn" data-toast="Cancelled (prototype)">Cancel</button><button class="btn p" data-go="2">Continue with ${S.doc.toLowerCase().replace('pwd','PWD')}</button></div>`}
+
+function step2(){
+ const rx=S.doc=='Prescription',ok=rx;
+ const notes=`<span class="lab">Additional notes</span>${ta('notes','Optional notes for the patient or pharmacist')}`;
+ const rxForm=`<div class="mc"><div class="mh">Medication 1<button data-toast="Prototype: removes this medication">${ic('del')}Remove</button></div><div class="g">${cell('drug')}${cell('brand')}${cell('strength',1)}${cell('form')}${cell('qty')}${cell('freq',1)}${cell('dur',1)}${cell('sig',1)}</div></div><button class="add" data-toast="Prototype: adds another Medication card">${ic('add')}Add another medication</button>${notes}`;
+ const form=`<div class="dr"><button class="field fl" style="width:auto;min-width:15rem">${ic('cal')}October 5th, 2026</button><div class="seg">${['Write','Preview'].map(m=>`<button class="${S.mode==m?'on':''}" data-mode="${m}">${m}</button>`).join('')}</div></div>`+(S.mode=='Preview'?paper():rxForm);
+ const sh=S.sheet&&rx?`<div class="ov" data-close="1"><div class="sh" onclick="event.stopPropagation()"><div class="r"><b style="font-size:1.4rem">${L[S.sheet]}</b><button class="x" data-close="1" aria-label="Close">${ic('close')}</button></div><div class="field ph fl" style="margin-top:.5rem">${ic('search')}${PH[S.sheet]}</div>${rows(S.sheet,S.sheet=='strength'?sOpts():O[S.sheet])}</div></div>`:'';
+ const sm=rx?`${S.drug}${S.strength?', '+(S.strength.length>24?S.strength.slice(0,24)+'…':S.strength):''} · ${S.form} · ${S.qty} · ${S.freq} · ${S.dur}`:`${S.purpose||'Purpose'} · ${S.find||'Diagnosis / findings'}`;
+ const strip=ok&&S.mode=='Write'?`<button class="strip" data-mode="Preview">${ic('eye')}<span>${sm}</span><b>Preview</b></button>`:'';
+ const gen='prescription';
+ return `<div class="hd"><div class="r"><button class="back" data-go="1">${ic('back')}Back</button><button class="x" data-go="1" aria-label="Close">${ic('close')}</button></div><div class="r tr"><h2>${S.doc}</h2>${TS()}</div><div class="sub">Step 2 of 2</div><div class="bar s"><i></i><i></i></div></div>
+ <div class="main"><div class="body">${ok?form:`<p class="ph" style="margin-top:1.5rem">Medical certificate, Lab request, Referral, Sick leave and PWD cert keep their existing forms (not redesigned here). Go back and choose Prescription to see the redesigned form.</p>`}</div>${ok?`<aside class="pv"><b style="font-size:1.2rem">Live preview</b><div style="height:.8rem"></div>${paper()}</aside>`:''}</div>
+ ${strip}<div class="ft"><div class="saved">Draft saved 9:20 AM</div><div class="fr"><button class="btn" data-go="1">Cancel</button><button class="btn pvb" data-mode="Preview">Preview</button><button class="btn p" data-toast="Prototype: ${gen} generated">Generate ${gen}</button></div></div>${sh}`}
+
+function tool(){const cur=S.step==1?'1':S.doc=='Medical certificate'?'cert':S.doc=='Prescription'?'rx':'';
+ document.getElementById('tool').innerHTML=`<div class="tg">View ${['auto','mobile','tablet','desktop'].map(d=>`<button class="${S.dev==d?'on':''}" data-dev="${d}">${d[0].toUpperCase()+d.slice(1)}</button>`).join('')}</div><div class="tg">Screen ${[['1','Step 1'],['rx','Prescription step 2']].map(([k,t])=>`<button class="${cur==k?'on':''}" data-jump="${k}">${t}</button>`).join('')}</div>`}
+function fontPx(){const ph=matchMedia('(max-width:520px)').matches||S.dev=='mobile';document.documentElement.style.fontSize=({16:16,19:ph?17:18,22:ph?18:20})[S.fs]+'px'}
+window.addEventListener('resize',fontPx);
+function render(){
+ const b=document.querySelector('.body'),st=b?b.scrollTop:0,w=document.getElementById('w');
+ fontPx();document.documentElement.dataset.dev=S.dev;
+ w.className='wrap'+(S.step==2?' s2':'');
+ document.getElementById('pill').textContent=S.step==1?'Step 1 of 2: choose the document':'Step 2 of 2: '+S.doc.toLowerCase();
+ document.getElementById('m').innerHTML=S.step==1?step1():step2();tool();
+ const nb=document.querySelector('.body');if(nb)nb.scrollTop=st}
+function toast(t){const e=document.getElementById('t');e.textContent=t;e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('on'),2200)}
+document.addEventListener('click',e=>{const b=e.target.closest('button,.ov');if(!b)return;const d=b.dataset;let top=false,ch=true;
+ if(d.fs){S.fs=+d.fs;try{localStorage.setItem('rxfs',d.fs)}catch(x){}}
+ else if(d.dev)S.dev=d.dev;
+ else if(d.jump){S.sheet=null;S.mode='Write';top=true;if(d.jump=='1')S.step=1;else{S.step=2;S.doc=d.jump=='cert'?'Medical certificate':'Prescription'}}
+ else if(d.d)S.doc=d.d;else if(d.x)S.draft=false;
+ else if(d.k){S[d.k]=d.v;if(d.k=='drug')S.strength='';S.sheet=null}
+ else if(d.q)S.qty=Math.max(1,S.qty+ +d.q);
+ else if(d.sig!==undefined){S.sig=d.sig;S.sigOpen=false}
+ else if(d.sheet)S.sheet=d.sheet;else if(d.close)S.sheet=null;else if(d.mode){S.mode=d.mode;top=d.mode=='Preview'}
+ else if(d.go){S.step=+d.go;S.sheet=null;S.mode='Write';top=true}
+ else if(!d.toast)ch=false;
+ if(d.go&&d.toast){S.step=+d.go;top=true}
+ if(d.toast)toast(d.toast);
+ if(ch){render();if(top){const n=document.querySelector('.body');if(n)n.scrollTop=0}}});
+document.addEventListener('focusin',e=>{if(e.target.dataset.t=='sig'){S.sigOpen=true;const x=document.getElementById('sigdd');if(x)x.hidden=false}});
+document.addEventListener('mousedown',e=>{if(S.sigOpen&&!e.target.closest('.ddw')){S.sigOpen=false;const x=document.getElementById('sigdd');if(x)x.hidden=true}});
+document.addEventListener('input',e=>{const k=e.target.dataset.t;if(!k)return;S[k]=e.target.value;document.querySelectorAll('[data-pv]').forEach(p=>p.innerHTML=pvh())});
+render();
+</script></body></html>
